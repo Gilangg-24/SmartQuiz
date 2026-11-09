@@ -9,52 +9,50 @@ from datetime import datetime
 
 DB_NAME = "smartquiz.db"
 JUMLAH_SOAL = 10
+WAKTU_KUIS = 15 * 60  # 15 menit
+
 
 # =====================================================
 # BANK SOAL
-# Setiap materi memiliki 3 tingkat kesulitan.
-# Setiap tingkat memiliki 10 soal.
 # =====================================================
 
 BANK_SOAL = {
     "Dasar Python": {
         "Mudah": [
-            {"soal": "Apa fungsi print()?", "opsi": ["Menampilkan output", "Menghapus file", "Mengulang program", "Membuat database"], "jawaban": "Menampilkan output"},
+            {"soal": "Apa fungsi dari print() dalam Python?", "opsi": ["Menampilkan output", "Menghapus file", "Mengulang program", "Membuat database"], "jawaban": "Menampilkan output"},
             {"soal": "Tipe data untuk menyimpan teks adalah ...", "opsi": ["int", "str", "float", "bool"], "jawaban": "str"},
-            {"soal": "Simbol komentar satu baris Python adalah ...", "opsi": ["//", "<!--", "#", "**"], "jawaban": "#"},
-            {"soal": "Perintah menerima input pengguna adalah ...", "opsi": ["input()", "print()", "type()", "range()"], "jawaban": "input()"},
-            {"soal": "Kata kunci untuk percabangan adalah ...", "opsi": ["repeat", "if", "define", "loop"], "jawaban": "if"},
-            {"soal": "Perulangan untuk menelusuri list adalah ...", "opsi": ["for", "switch", "case", "goto"], "jawaban": "for"},
-            {"soal": "Tipe data untuk True atau False adalah ...", "opsi": ["str", "int", "bool", "list"], "jawaban": "bool"},
-            {"soal": "Operator untuk membandingkan dua nilai sama adalah ...", "opsi": ["=", "==", "!=", "+="], "jawaban": "=="},
-            {"soal": "Fungsi len() digunakan untuk ...", "opsi": ["Menghitung panjang data", "Mencetak teks", "Mengubah angka", "Menghapus variabel"], "jawaban": "Menghitung panjang data"},
+            {"soal": "Simbol komentar satu baris di Python adalah ...", "opsi": ["//", "<!--", "#", "**"], "jawaban": "#"},
+            {"soal": "Perintah untuk menerima input dari pengguna adalah ...", "opsi": ["input()", "print()", "type()", "range()"], "jawaban": "input()"},
+            {"soal": "Kata kunci untuk membuat percabangan adalah ...", "opsi": ["repeat", "if", "define", "loop"], "jawaban": "if"},
+            {"soal": "Perulangan yang umum digunakan untuk menelusuri list adalah ...", "opsi": ["for", "switch", "case", "goto"], "jawaban": "for"},
+            {"soal": "Tipe data untuk nilai True atau False adalah ...", "opsi": ["str", "int", "bool", "list"], "jawaban": "bool"},
+            {"soal": "Operator untuk membandingkan dua nilai agar sama adalah ...", "opsi": ["=", "==", "!=", "+="], "jawaban": "=="},
+            {"soal": "Fungsi len() digunakan untuk ...", "opsi": ["Menghitung panjang data", "Mencetak teks", "Mengubah menjadi angka", "Menghapus variabel"], "jawaban": "Menghitung panjang data"},
             {"soal": "Library bawaan untuk mengacak data adalah ...", "opsi": ["random", "sqlite3", "tkinter", "datetime"], "jawaban": "random"}
         ],
-
         "Sedang": [
             {"soal": "Apa hasil dari operasi 10 // 3?", "opsi": ["3.33", "3", "1", "4"], "jawaban": "3"},
-            {"soal": "Manakah penamaan variabel yang benar?", "opsi": ["2nama = 'Budi'", "nama siswa = 'Budi'", "nama = 'Budi'", "class = 'Budi'"], "jawaban": "nama = 'Budi'"},
-            {"soal": "Apa hasil x = [2, 4, 6]; print(x[1])?", "opsi": ["2", "4", "6", "1"], "jawaban": "4"},
-            {"soal": "Apa fungsi range(5)?", "opsi": ["Angka 0 sampai 4", "Angka 1 sampai 5", "Menghentikan program", "Mengubah angka"], "jawaban": "Angka 0 sampai 4"},
+            {"soal": "Manakah contoh penamaan variabel yang benar?", "opsi": ["2nama = 'Budi'", "nama siswa = 'Budi'", "nama = 'Budi'", "class = 'Budi'"], "jawaban": "nama = 'Budi'"},
+            {"soal": "Apa hasil kode: x = [2, 4, 6]; print(x[1])?", "opsi": ["2", "4", "6", "1"], "jawaban": "4"},
+            {"soal": "Apa fungsi range(5) pada perulangan?", "opsi": ["Menghasilkan angka 0 sampai 4", "Menghasilkan angka 1 sampai 5", "Menghentikan program", "Mengubah angka menjadi teks"], "jawaban": "Menghasilkan angka 0 sampai 4"},
             {"soal": "Apa hasil dari 7 % 3?", "opsi": ["1", "2", "3", "4"], "jawaban": "1"},
-            {"soal": "Kata kunci untuk membuat fungsi adalah ...", "opsi": ["func", "define", "def", "function"], "jawaban": "def"},
+            {"soal": "Kata kunci untuk mendefinisikan fungsi adalah ...", "opsi": ["func", "define", "def", "function"], "jawaban": "def"},
             {"soal": "Apa hasil dari int('12')?", "opsi": ["'12'", "12", "12.0", "Error"], "jawaban": "12"},
-            {"soal": "Struktur data pasangan kunci dan nilai adalah ...", "opsi": ["list", "tuple", "dictionary", "set"], "jawaban": "dictionary"},
+            {"soal": "Struktur data untuk menyimpan pasangan kunci dan nilai adalah ...", "opsi": ["list", "tuple", "dictionary", "set"], "jawaban": "dictionary"},
             {"soal": "Apa fungsi append() pada list?", "opsi": ["Menghapus elemen", "Menambah elemen di akhir", "Mengurutkan data", "Menghitung elemen"], "jawaban": "Menambah elemen di akhir"},
             {"soal": "Apa hasil dari 3 ** 2?", "opsi": ["6", "8", "9", "12"], "jawaban": "9"}
         ],
-
         "Sulit": [
-            {"soal": "Apa keluaran a=[1,2]; b=a; b.append(3); print(a)?", "opsi": ["[1, 2]", "[1, 2, 3]", "[3]", "Error"], "jawaban": "[1, 2, 3]"},
+            {"soal": "Apa keluaran kode: a = [1, 2]; b = a; b.append(3); print(a)?", "opsi": ["[1, 2]", "[1, 2, 3]", "[3]", "Error"], "jawaban": "[1, 2, 3]"},
             {"soal": "Apa hasil dari bool([])?", "opsi": ["True", "False", "None", "Error"], "jawaban": "False"},
             {"soal": "Apa fungsi try-except?", "opsi": ["Mengulang program", "Menangani exception", "Membuat class", "Menghapus variabel"], "jawaban": "Menangani exception"},
             {"soal": "Apa hasil dari len({'a': 1, 'b': 2})?", "opsi": ["1", "2", "3", "Error"], "jawaban": "2"},
-            {"soal": "Apa keluaran print([x*x for x in range(3)])?", "opsi": ["[0, 1, 4]", "[1, 4, 9]", "[0, 1, 2]", "[3, 6, 9]"], "jawaban": "[0, 1, 4]"},
+            {"soal": "Apa keluaran: print([x*x for x in range(3)])?", "opsi": ["[0, 1, 4]", "[1, 4, 9]", "[0, 1, 2]", "[3, 6, 9]"], "jawaban": "[0, 1, 4]"},
             {"soal": "Apa perbedaan utama list dan tuple?", "opsi": ["List dapat diubah, tuple tidak", "Tuple selalu kosong", "List hanya angka", "Tidak ada perbedaan"], "jawaban": "List dapat diubah, tuple tidak"},
             {"soal": "Apa hasil dari 'Python'[1:4]?", "opsi": ["Pyt", "yth", "tho", "ytho"], "jawaban": "yth"},
-            {"soal": "Jika fungsi tidak memiliki return, nilai default-nya adalah ...", "opsi": ["0", "False", "None", "True"], "jawaban": "None"},
-            {"soal": "Apa tujuan if __name__ == '__main__'?", "opsi": ["Menjalankan bagian utama saat file dijalankan langsung", "Mengimpor semua library", "Menghapus database", "Membuat perulangan"], "jawaban": "Menjalankan bagian utama saat file dijalankan langsung"},
-            {"soal": "Kompleksitas rata-rata pencarian kunci dictionary adalah ...", "opsi": ["O(1)", "O(n)", "O(n²)", "O(log n)"], "jawaban": "O(1)"}
+            {"soal": "Jika fungsi tidak memiliki pernyataan return, nilai yang dikembalikan secara default adalah ...", "opsi": ["0", "False", "None", "Error"], "jawaban": "None"},
+            {"soal": "Apa tujuan penggunaan if __name__ == '__main__'?", "opsi": ["Menjalankan bagian utama saat file dijalankan langsung", "Mengimpor semua library", "Menghapus database", "Membuat perulangan"], "jawaban": "Menjalankan bagian utama saat file dijalankan langsung"},
+            {"soal": "Apa kompleksitas rata-rata pencarian berdasarkan kunci pada dictionary?", "opsi": ["O(1)", "O(n)", "O(n²)", "O(log n)"], "jawaban": "O(1)"}
         ]
     },
 
@@ -63,39 +61,37 @@ BANK_SOAL = {
             {"soal": "Perangkat yang menghubungkan jaringan berbeda adalah ...", "opsi": ["Router", "Keyboard", "Monitor", "Printer"], "jawaban": "Router"},
             {"soal": "Kepanjangan LAN adalah ...", "opsi": ["Local Area Network", "Large Access Node", "Long Area Number", "Local Analog Network"], "jawaban": "Local Area Network"},
             {"soal": "Perangkat untuk menghubungkan banyak komputer dalam LAN adalah ...", "opsi": ["Switch", "Scanner", "Speaker", "Proyektor"], "jawaban": "Switch"},
-            {"soal": "Jumlah bit dalam alamat IPv4 adalah ...", "opsi": ["16 bit", "32 bit", "64 bit", "128 bit"], "jawaban": "32 bit"},
-            {"soal": "Protokol penerjemah nama domain menjadi IP adalah ...", "opsi": ["DNS", "DHCP", "FTP", "SMTP"], "jawaban": "DNS"},
-            {"soal": "Perangkat yang menyediakan IP otomatis adalah ...", "opsi": ["DHCP server", "DNS server", "Repeater", "Patch panel"], "jawaban": "DHCP server"},
-            {"soal": "Perintah untuk menguji konektivitas adalah ...", "opsi": ["ping", "mkdir", "copy", "format"], "jawaban": "ping"},
-            {"soal": "Konektor yang umum digunakan pada kabel UTP adalah ...", "opsi": ["RJ45", "USB-C", "VGA", "HDMI"], "jawaban": "RJ45"},
+            {"soal": "Berapa jumlah bit dalam alamat IPv4?", "opsi": ["16 bit", "32 bit", "64 bit", "128 bit"], "jawaban": "32 bit"},
+            {"soal": "Protokol yang menerjemahkan nama domain menjadi alamat IP adalah ...", "opsi": ["DNS", "DHCP", "FTP", "SMTP"], "jawaban": "DNS"},
+            {"soal": "Perangkat yang menyediakan alamat IP secara otomatis adalah ...", "opsi": ["DHCP server", "DNS server", "Repeater", "Patch panel"], "jawaban": "DHCP server"},
+            {"soal": "Perintah umum untuk menguji konektivitas adalah ...", "opsi": ["ping", "mkdir", "copy", "format"], "jawaban": "ping"},
+            {"soal": "Konektor yang umum digunakan pada kabel Ethernet UTP adalah ...", "opsi": ["RJ45", "USB-C", "VGA", "HDMI"], "jawaban": "RJ45"},
             {"soal": "Lapisan OSI yang menangani routing adalah ...", "opsi": ["Network", "Physical", "Session", "Presentation"], "jawaban": "Network"},
             {"soal": "Fungsi utama access point adalah ...", "opsi": ["Menghubungkan perangkat nirkabel ke jaringan", "Menyimpan dokumen", "Mencetak gambar", "Mengolah angka"], "jawaban": "Menghubungkan perangkat nirkabel ke jaringan"}
         ],
-
         "Sedang": [
             {"soal": "Manakah alamat IPv4 yang valid untuk host?", "opsi": ["192.168.1.10", "300.168.1.10", "192.168.1.256", "192.168.1"], "jawaban": "192.168.1.10"},
-            {"soal": "Protokol untuk memperoleh IP otomatis adalah ...", "opsi": ["DHCP", "HTTP", "SSH", "IMAP"], "jawaban": "DHCP"},
-            {"soal": "Jumlah host yang dapat digunakan pada subnet /24 adalah ...", "opsi": ["254", "256", "255", "128"], "jawaban": "254"},
+            {"soal": "Protokol yang umum digunakan untuk memperoleh IP otomatis adalah ...", "opsi": ["DHCP", "HTTP", "SSH", "IMAP"], "jawaban": "DHCP"},
+            {"soal": "Berapa jumlah alamat host yang dapat digunakan pada subnet /24?", "opsi": ["254", "256", "255", "128"], "jawaban": "254"},
             {"soal": "Port default HTTP adalah ...", "opsi": ["21", "22", "80", "443"], "jawaban": "80"},
             {"soal": "Perangkat yang bekerja terutama pada Layer 2 OSI adalah ...", "opsi": ["Switch", "Router", "Modem", "Repeater"], "jawaban": "Switch"},
             {"soal": "Apa fungsi default gateway?", "opsi": ["Menghubungkan jaringan lokal ke jaringan lain", "Memberi nama komputer", "Menyimpan file", "Mengubah MAC address"], "jawaban": "Menghubungkan jaringan lokal ke jaringan lain"},
-            {"soal": "Kabel straight-through umumnya digunakan untuk menghubungkan ...", "opsi": ["Perangkat berbeda jenis", "Dua PC langsung", "Dua switch lama", "Dua router serial"], "jawaban": "Perangkat berbeda jenis"},
+            {"soal": "Kabel straight-through umumnya digunakan untuk menghubungkan ...", "opsi": ["Perangkat berbeda jenis", "Dua PC langsung tanpa auto MDI-X", "Dua switch lama", "Dua router serial"], "jawaban": "Perangkat berbeda jenis"},
             {"soal": "DNS menggunakan port standar ...", "opsi": ["53", "67", "80", "110"], "jawaban": "53"},
             {"soal": "Alamat loopback IPv4 yang umum adalah ...", "opsi": ["127.0.0.1", "192.168.1.1", "255.255.255.0", "0.0.0.0"], "jawaban": "127.0.0.1"},
             {"soal": "Topologi dengan satu perangkat pusat seperti switch disebut ...", "opsi": ["Star", "Bus", "Ring", "Mesh"], "jawaban": "Star"}
         ],
-
         "Sulit": [
-            {"soal": "Jaringan 192.168.10.0/26 memiliki berapa host yang dapat digunakan?", "opsi": ["62", "64", "30", "126"], "jawaban": "62"},
-            {"soal": "Network address dari 192.168.1.130/25 adalah ...", "opsi": ["192.168.1.0", "192.168.1.128", "192.168.1.130", "192.168.1.255"], "jawaban": "192.168.1.128"},
-            {"soal": "Broadcast address dari 192.168.1.10/24 adalah ...", "opsi": ["192.168.1.0", "192.168.1.1", "192.168.1.254", "192.168.1.255"], "jawaban": "192.168.1.255"},
-            {"soal": "Protokol untuk memetakan IPv4 ke alamat MAC adalah ...", "opsi": ["ARP", "DNS", "FTP", "NTP"], "jawaban": "ARP"},
-            {"soal": "Routing paket antarjaringan berlangsung pada layer OSI ...", "opsi": ["Network", "Data Link", "Transport", "Application"], "jawaban": "Network"},
-            {"soal": "Bandwidth 100 Mbps dibagi rata ke 4 pengguna. Tiap pengguna mendapat ...", "opsi": ["25 Mbps", "40 Mbps", "50 Mbps", "100 Mbps"], "jawaban": "25 Mbps"},
+            {"soal": "Jaringan 192.168.10.0/26 memiliki berapa alamat host yang dapat digunakan?", "opsi": ["62", "64", "30", "126"], "jawaban": "62"},
+            {"soal": "Alamat network dari 192.168.1.130/25 adalah ...", "opsi": ["192.168.1.0", "192.168.1.128", "192.168.1.130", "192.168.1.255"], "jawaban": "192.168.1.128"},
+            {"soal": "Jika IP 192.168.1.10/24, alamat broadcast-nya adalah ...", "opsi": ["192.168.1.0", "192.168.1.1", "192.168.1.254", "192.168.1.255"], "jawaban": "192.168.1.255"},
+            {"soal": "Protokol untuk memetakan alamat IPv4 ke alamat MAC pada LAN adalah ...", "opsi": ["ARP", "DNS", "FTP", "NTP"], "jawaban": "ARP"},
+            {"soal": "Pada model OSI, routing paket antarjaringan berlangsung di layer ...", "opsi": ["Network", "Data Link", "Transport", "Application"], "jawaban": "Network"},
+            {"soal": "Jika bandwidth 100 Mbps dibagi rata ke 4 pengguna, tiap pengguna mendapat ...", "opsi": ["25 Mbps", "40 Mbps", "50 Mbps", "100 Mbps"], "jawaban": "25 Mbps"},
             {"soal": "Subnet mask untuk prefix /27 adalah ...", "opsi": ["255.255.255.0", "255.255.255.128", "255.255.255.224", "255.255.255.240"], "jawaban": "255.255.255.224"},
-            {"soal": "Protokol routing dinamis yang menggunakan hop count adalah ...", "opsi": ["RIP", "OSPF", "BGP", "HTTP"], "jawaban": "RIP"},
+            {"soal": "Protokol routing dinamis yang menggunakan hop count sebagai metrik adalah ...", "opsi": ["RIP", "OSPF", "BGP", "HTTP"], "jawaban": "RIP"},
             {"soal": "Apa tujuan VLAN pada switch?", "opsi": ["Memisahkan broadcast domain secara logis", "Mempercepat CPU", "Mengganti alamat MAC", "Menghapus routing"], "jawaban": "Memisahkan broadcast domain secara logis"},
-            {"soal": "Bandwidth 1 Gbps setara dengan ...", "opsi": ["100 Mbps", "500 Mbps", "1000 Mbps", "1024 Mbps"], "jawaban": "1000 Mbps"}
+            {"soal": "Jika link memiliki bandwidth 1 Gbps, nilai tersebut setara dengan ...", "opsi": ["100 Mbps", "500 Mbps", "1000 Mbps", "1024 Mbps"], "jawaban": "1000 Mbps"}
         ]
     }
 }
@@ -133,8 +129,6 @@ def inisialisasi_database():
             )
         """)
 
-        # Memeriksa kolom database lama.
-        # Jika belum ada, tambahkan kolom tingkat_kesulitan.
         kolom = [
             baris[1]
             for baris in conn.execute(
@@ -203,13 +197,16 @@ def cek_login(username, password):
     return None
 
 
-def simpan_hasil(user_id, materi, tingkat_kesulitan, skor, benar, total):
+def simpan_hasil(user_id, materi, tingkat_kesulitan,
+                 skor, benar, total):
+
     tanggal = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
     with koneksi_db() as conn:
         conn.execute("""
             INSERT INTO hasil_kuis
-            (user_id, materi, tingkat_kesulitan, skor, benar, total, tanggal)
+            (user_id, materi, tingkat_kesulitan,
+             skor, benar, total, tanggal)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
             user_id, materi, tingkat_kesulitan,
@@ -220,7 +217,8 @@ def simpan_hasil(user_id, materi, tingkat_kesulitan, skor, benar, total):
 def ambil_riwayat(user_id):
     with koneksi_db() as conn:
         return conn.execute("""
-            SELECT materi, tingkat_kesulitan, skor, benar, total, tanggal
+            SELECT materi, tingkat_kesulitan,
+                   skor, benar, total, tanggal
             FROM hasil_kuis
             WHERE user_id = ?
             ORDER BY id DESC
@@ -232,6 +230,7 @@ def ambil_riwayat(user_id):
 # =====================================================
 
 class SmartQuiz:
+
     def __init__(self, root):
         self.root = root
         self.root.title("SmartQuiz - Kuis Pembelajaran")
@@ -241,10 +240,18 @@ class SmartQuiz:
         self.user = None
         self.materi = None
         self.tingkat_kesulitan = None
+
         self.daftar_soal = []
         self.indeks = 0
         self.jawaban_benar = 0
         self.jawaban_peserta = []
+
+        # Variabel timer
+        self.waktu_tersisa = WAKTU_KUIS
+        self.timer_id = None
+        self.label_timer = None
+        self.kuis_selesai = False
+        self.waktu_habis = False
 
         self.style = ttk.Style()
 
@@ -258,6 +265,8 @@ class SmartQuiz:
     def bersihkan(self):
         for widget in self.root.winfo_children():
             widget.destroy()
+
+        self.label_timer = None
 
     def buat_judul(self, induk, teks):
         ttk.Label(
@@ -390,7 +399,6 @@ class SmartQuiz:
         self.pilihan_materi.current(0)
         self.pilihan_materi.pack(pady=5)
 
-        # PILIHAN TINGKAT KESULITAN
         ttk.Label(
             frame,
             text="Pilih tingkat kesulitan:"
@@ -436,18 +444,24 @@ class SmartQuiz:
         ).pack(pady=15)
 
     def logout(self):
+        if self.timer_id is not None:
+            self.root.after_cancel(self.timer_id)
+            self.timer_id = None
+
         self.user = None
         self.tampilkan_login()
 
     # -------------------------------------------------
-    # KUIS
+    # KUIS DAN TIMER
     # -------------------------------------------------
 
     def mulai_kuis(self):
         self.materi = self.pilihan_materi.get()
         self.tingkat_kesulitan = self.pilihan_kesulitan.get()
 
-        kumpulan_soal = BANK_SOAL[self.materi][self.tingkat_kesulitan]
+        kumpulan_soal = BANK_SOAL[self.materi][
+            self.tingkat_kesulitan
+        ]
 
         if len(kumpulan_soal) < JUMLAH_SOAL:
             messagebox.showerror(
@@ -465,7 +479,58 @@ class SmartQuiz:
         self.jawaban_benar = 0
         self.jawaban_peserta = []
 
+        # Mengatur ulang timer setiap kuis baru dimulai
+        if self.timer_id is not None:
+            self.root.after_cancel(self.timer_id)
+
+        self.waktu_tersisa = WAKTU_KUIS
+        self.timer_id = None
+        self.kuis_selesai = False
+        self.waktu_habis = False
+
         self.tampilkan_soal()
+
+        # Memulai hitung mundur
+        self.timer_id = self.root.after(
+            1000,
+            self.hitung_mundur
+        )
+
+    def hitung_mundur(self):
+        if self.kuis_selesai:
+            return
+
+        if self.waktu_tersisa <= 0:
+            self.waktu_habis = True
+
+            # Mengisi soal yang belum dijawab dengan teks kosong
+            while len(self.jawaban_peserta) < JUMLAH_SOAL:
+                self.jawaban_peserta.append("")
+
+            self.selesaikan_kuis()
+            return
+
+        menit, detik = divmod(
+            self.waktu_tersisa,
+            60
+        )
+
+        teks_waktu = (
+            f"Sisa Waktu: {menit:02d}:{detik:02d}"
+        )
+
+        if self.label_timer is not None:
+            try:
+                self.label_timer.config(text=teks_waktu)
+            except tk.TclError:
+                pass
+
+        self.waktu_tersisa -= 1
+
+        self.timer_id = self.root.after(
+            1000,
+            self.hitung_mundur
+        )
 
     def tampilkan_soal(self):
         self.bersihkan()
@@ -486,6 +551,19 @@ class SmartQuiz:
             text=f"Tingkat Kesulitan: {self.tingkat_kesulitan}",
             font=("Arial", 10, "italic")
         ).pack(anchor="w", pady=(0, 8))
+
+        # Menampilkan timer
+        menit, detik = divmod(
+            self.waktu_tersisa,
+            60
+        )
+
+        self.label_timer = ttk.Label(
+            frame,
+            text=f"Sisa Waktu: {menit:02d}:{detik:02d}",
+            font=("Arial", 12, "bold")
+        )
+        self.label_timer.pack(anchor="e", pady=5)
 
         ttk.Label(
             frame,
@@ -522,6 +600,9 @@ class SmartQuiz:
         ).pack(anchor="e", pady=(25, 5))
 
     def proses_jawaban(self):
+        if self.kuis_selesai:
+            return
+
         pilihan = self.pilihan_jawaban.get()
 
         if not pilihan:
@@ -532,6 +613,7 @@ class SmartQuiz:
             return
 
         soal = self.daftar_soal[self.indeks]
+
         self.jawaban_peserta.append(pilihan)
 
         if pilihan == soal["jawaban"]:
@@ -544,6 +626,17 @@ class SmartQuiz:
             self.selesaikan_kuis()
 
     def selesaikan_kuis(self):
+        # Mencegah hasil tersimpan lebih dari satu kali
+        if self.kuis_selesai:
+            return
+
+        self.kuis_selesai = True
+
+        # Menghentikan timer
+        if self.timer_id is not None:
+            self.root.after_cancel(self.timer_id)
+            self.timer_id = None
+
         skor = round(
             self.jawaban_benar / JUMLAH_SOAL * 100
         )
@@ -582,6 +675,14 @@ class SmartQuiz:
             text=f"Tingkat Kesulitan: {self.tingkat_kesulitan}",
             font=("Arial", 11)
         ).pack(pady=3)
+
+        if self.waktu_habis:
+            ttk.Label(
+                frame,
+                text="Waktu pengerjaan telah habis!",
+                foreground="red",
+                font=("Arial", 11, "bold")
+            ).pack(pady=5)
 
         ttk.Label(
             frame,
@@ -634,22 +735,32 @@ class SmartQuiz:
         )
         area.pack(fill="both", expand=True)
 
-        for nomor, soal in enumerate(self.daftar_soal, start=1):
+        for nomor, soal in enumerate(
+            self.daftar_soal,
+            start=1
+        ):
             pilihan = self.jawaban_peserta[nomor - 1]
-            status = (
-                "BENAR"
-                if pilihan == soal["jawaban"]
-                else "SALAH"
-            )
+
+            if pilihan == "":
+                status = "BELUM DIJAWAB"
+                teks_pilihan = "Tidak dijawab"
+            elif pilihan == soal["jawaban"]:
+                status = "BENAR"
+                teks_pilihan = pilihan
+            else:
+                status = "SALAH"
+                teks_pilihan = pilihan
 
             area.insert(
                 "end",
                 f"{nomor}. {soal['soal']}\n"
             )
+
             area.insert(
                 "end",
-                f"Jawaban Anda: {pilihan} ({status})\n"
+                f"Jawaban Anda: {teks_pilihan} ({status})\n"
             )
+
             area.insert(
                 "end",
                 f"Jawaban benar: {soal['jawaban']}\n\n"
@@ -711,10 +822,21 @@ class SmartQuiz:
             orient="vertical",
             command=tabel.yview
         )
-        tabel.configure(yscrollcommand=scrollbar.set)
 
-        tabel.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        tabel.configure(
+            yscrollcommand=scrollbar.set
+        )
+
+        tabel.pack(
+            side="left",
+            fill="both",
+            expand=True
+        )
+
+        scrollbar.pack(
+            side="right",
+            fill="y"
+        )
 
         for materi, kesulitan, skor, benar, total, tanggal in ambil_riwayat(
             self.user["id"]
@@ -731,7 +853,10 @@ class SmartQuiz:
                 )
             )
 
-        bagian_bawah = ttk.Frame(self.root, padding=10)
+        bagian_bawah = ttk.Frame(
+            self.root,
+            padding=10
+        )
         bagian_bawah.pack(fill="x")
 
         ttk.Button(
@@ -750,5 +875,5 @@ if __name__ == "__main__":
 
     root = tk.Tk()
     aplikasi = SmartQuiz(root)
-    root.mainloop()
 
+    root.mainloop()
