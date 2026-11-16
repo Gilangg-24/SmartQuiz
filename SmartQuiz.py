@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 import sqlite3
@@ -225,6 +224,22 @@ def ambil_riwayat(user_id):
         """, (user_id,)).fetchall()
 
 
+def ambil_leaderboard(limit=10):
+    with koneksi_db() as conn:
+        return conn.execute("""
+            SELECT u.username,
+                   h.materi,
+                   h.tingkat_kesulitan,
+                   MAX(h.skor) AS skor_terbaik,
+                   h.tanggal
+            FROM hasil_kuis h
+            JOIN users u ON h.user_id = u.id
+            GROUP BY u.id
+            ORDER BY skor_terbaik DESC, h.id ASC
+            LIMIT ?
+        """, (limit,)).fetchall()
+
+
 # =====================================================
 # APLIKASI TKINTER
 # =====================================================
@@ -234,8 +249,8 @@ class SmartQuiz:
     def __init__(self, root):
         self.root = root
         self.root.title("SmartQuiz - Kuis Pembelajaran")
-        self.root.geometry("760x560")
-        self.root.minsize(620, 480)
+        self.root.geometry("760x580")
+        self.root.minsize(620, 500)
 
         self.user = None
         self.materi = None
@@ -430,6 +445,12 @@ class SmartQuiz:
             frame,
             text="Lihat Riwayat Nilai",
             command=self.tampilkan_riwayat
+        ).pack(fill="x", pady=6)
+
+        ttk.Button(
+            frame,
+            text="Leaderboard (Top 10)",
+            command=self.tampilkan_leaderboard
         ).pack(fill="x", pady=6)
 
         ttk.Button(
@@ -708,14 +729,20 @@ class SmartQuiz:
 
         ttk.Button(
             frame,
-            text="Kembali ke Menu",
-            command=self.tampilkan_menu
+            text="Lihat Leaderboard",
+            command=self.tampilkan_leaderboard
         ).pack(fill="x", pady=6)
 
         ttk.Button(
             frame,
             text="Lihat Riwayat Nilai",
             command=self.tampilkan_riwayat
+        ).pack(fill="x", pady=6)
+
+        ttk.Button(
+            frame,
+            text="Kembali ke Menu",
+            command=self.tampilkan_menu
         ).pack(fill="x", pady=6)
 
     def tampilkan_pembahasan(self):
@@ -849,6 +876,100 @@ class SmartQuiz:
                     kesulitan,
                     skor,
                     f"{benar}/{total}",
+                    tanggal
+                )
+            )
+
+        bagian_bawah = ttk.Frame(
+            self.root,
+            padding=10
+        )
+        bagian_bawah.pack(fill="x")
+
+        ttk.Button(
+            bagian_bawah,
+            text="Kembali ke Menu",
+            command=self.tampilkan_menu
+        ).pack()
+
+    # -------------------------------------------------
+    # LEADERBOARD (TOP 10)
+    # -------------------------------------------------
+
+    def tampilkan_leaderboard(self):
+        self.bersihkan()
+
+        frame = ttk.Frame(self.root, padding=20)
+        frame.pack(fill="both", expand=True)
+
+        self.buat_judul(frame, "Leaderboard - Top 10 Nilai Terbaik")
+
+        kolom = (
+            "peringkat",
+            "username",
+            "materi",
+            "kesulitan",
+            "skor",
+            "tanggal"
+        )
+
+        tabel = ttk.Treeview(
+            frame,
+            columns=kolom,
+            show="headings",
+            height=12
+        )
+
+        tabel.heading("peringkat", text="Peringkat")
+        tabel.heading("username", text="Username")
+        tabel.heading("materi", text="Materi")
+        tabel.heading("kesulitan", text="Kesulitan")
+        tabel.heading("skor", text="Nilai Terbaik")
+        tabel.heading("tanggal", text="Tanggal")
+
+        tabel.column("peringkat", width=80, anchor="center")
+        tabel.column("username", width=130)
+        tabel.column("materi", width=170)
+        tabel.column("kesulitan", width=90, anchor="center")
+        tabel.column("skor", width=90, anchor="center")
+        tabel.column("tanggal", width=150, anchor="center")
+
+        scrollbar = ttk.Scrollbar(
+            frame,
+            orient="vertical",
+            command=tabel.yview
+        )
+
+        tabel.configure(
+            yscrollcommand=scrollbar.set
+        )
+
+        tabel.pack(
+            side="left",
+            fill="both",
+            expand=True
+        )
+
+        scrollbar.pack(
+            side="right",
+            fill="y"
+        )
+
+        data_leaderboard = ambil_leaderboard(10)
+
+        for peringkat, (username, materi, kesulitan, skor, tanggal) in enumerate(
+            data_leaderboard,
+            start=1
+        ):
+            tabel.insert(
+                "",
+                "end",
+                values=(
+                    f"#{peringkat}",
+                    username,
+                    materi,
+                    kesulitan,
+                    skor,
                     tanggal
                 )
             )
