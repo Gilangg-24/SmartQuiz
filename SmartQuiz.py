@@ -507,6 +507,12 @@ class SmartQuiz:
             text="Nilai dan riwayat tersimpan di database SQLite."
         ).pack(pady=15)
 
+        ttk.Button(
+            frame,
+            text="Statistik Perkembangan Belajar",
+            command=self.tampilkan_statistik
+        ).pack(fill="x", pady=5)
+
     def logout(self):
         if self.timer_id is not None:
             self.root.after_cancel(self.timer_id)
