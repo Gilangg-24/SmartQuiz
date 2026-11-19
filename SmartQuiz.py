@@ -240,6 +240,49 @@ def ambil_leaderboard(limit=10):
         """, (limit,)).fetchall()
 
 
+def ambil_statistik(user_id):
+    with koneksi_db() as conn:
+        ringkasan = conn.execute("""
+            SELECT COUNT(*),
+                   COALESCE(AVG(skor), 0),
+                   COALESCE(MAX(skor), 0),
+                   COALESCE(MIN(skor), 0),
+                   COALESCE(SUM(benar), 0),
+                   COALESCE(SUM(total), 0)
+            FROM hasil_kuis
+            WHERE user_id = ?
+        """, (user_id,)).fetchone()
+
+        perkembangan = conn.execute("""
+            SELECT materi, tingkat_kesulitan, skor, tanggal
+            FROM hasil_kuis
+            WHERE user_id = ?
+            ORDER BY id ASC
+        """, (user_id,)).fetchall()
+
+        per_materi = conn.execute("""
+            SELECT materi,
+                   COUNT(*) AS jumlah_kuis,
+                   ROUND(AVG(skor), 1) AS rata_rata,
+                   MAX(skor) AS tertinggi
+            FROM hasil_kuis
+            WHERE user_id = ?
+            GROUP BY materi
+            ORDER BY rata_rata DESC
+        """, (user_id,)).fetchall()
+
+    return {
+        "total_kuis": ringkasan[0],
+        "rata_rata": round(ringkasan[1], 1),
+        "tertinggi": ringkasan[2],
+        "terendah": ringkasan[3],
+        "total_benar": ringkasan[4],
+        "total_soal": ringkasan[5],
+        "perkembangan": perkembangan,
+        "per_materi": per_materi
+    }
+
+
 # =====================================================
 # APLIKASI TKINTER
 # =====================================================
