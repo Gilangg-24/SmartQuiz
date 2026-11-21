@@ -292,8 +292,8 @@ class SmartQuiz:
     def __init__(self, root):
         self.root = root
         self.root.title("SmartQuiz - Kuis Pembelajaran")
-        self.root.geometry("760x580")
-        self.root.minsize(620, 500)
+        self.root.geometry("760x620")
+        self.root.minsize(640, 520)
 
         self.user = None
         self.materi = None
@@ -331,7 +331,7 @@ class SmartQuiz:
             induk,
             text=teks,
             font=("Arial", 20, "bold")
-        ).pack(pady=(20, 15))
+        ).pack(pady=(15, 12))
 
     # -------------------------------------------------
     # LOGIN DAN REGISTRASI
@@ -446,7 +446,7 @@ class SmartQuiz:
         ttk.Label(
             frame,
             text="Pilih materi latihan:"
-        ).pack(pady=(20, 5))
+        ).pack(pady=(15, 5))
 
         self.pilihan_materi = ttk.Combobox(
             frame,
@@ -460,7 +460,7 @@ class SmartQuiz:
         ttk.Label(
             frame,
             text="Pilih tingkat kesulitan:"
-        ).pack(pady=(15, 5))
+        ).pack(pady=(12, 5))
 
         self.pilihan_kesulitan = ttk.Combobox(
             frame,
@@ -482,30 +482,7 @@ class SmartQuiz:
             frame,
             text="Mulai Kuis (10 Soal)",
             command=self.mulai_kuis
-        ).pack(fill="x", pady=(15, 6))
-
-        ttk.Button(
-            frame,
-            text="Lihat Riwayat Nilai",
-            command=self.tampilkan_riwayat
-        ).pack(fill="x", pady=6)
-
-        ttk.Button(
-            frame,
-            text="Leaderboard (Top 10)",
-            command=self.tampilkan_leaderboard
-        ).pack(fill="x", pady=6)
-
-        ttk.Button(
-            frame,
-            text="Logout",
-            command=self.logout
-        ).pack(fill="x", pady=6)
-
-        ttk.Label(
-            frame,
-            text="Nilai dan riwayat tersimpan di database SQLite."
-        ).pack(pady=15)
+        ).pack(fill="x", pady=(12, 5))
 
         ttk.Button(
             frame,
@@ -513,110 +490,28 @@ class SmartQuiz:
             command=self.tampilkan_statistik
         ).pack(fill="x", pady=5)
 
-    # -------------------------------------------------
-    # STATISTIK PERKEMBANGAN BELAJAR
-    # -------------------------------------------------
-
-    def tampilkan_statistik(self):
-        self.bersihkan()
-
-        frame = ttk.Frame(self.root, padding=20)
-        frame.pack(fill="both", expand=True)
-
-        self.buat_judul(frame, "Statistik Perkembangan Belajar")
-
-        data = ambil_statistik(self.user["id"])
-
-        if data["total_kuis"] == 0:
-            ttk.Label(
-                frame,
-                text="Belum ada data kuis. Silakan kerjakan kuis terlebih dahulu.",
-                font=("Arial", 11)
-            ).pack(pady=40)
-
-            ttk.Button(
-                frame,
-                text="Kembali ke Menu",
-                command=self.tampilkan_menu
-            ).pack(pady=10)
-            return
-
-        # Ringkasan Statistik Utama
-        frame_ringkasan = ttk.LabelFrame(
+        ttk.Button(
             frame,
-            text="Ringkasan Pengerjaan Kuis",
-            padding=12
-        )
-        frame_ringkasan.pack(fill="x", pady=(0, 12))
-
-        akurasi = round(
-            (data["total_benar"] / data["total_soal"]) * 100, 1
-        ) if data["total_soal"] > 0 else 0
-
-        item_ringkasan = [
-            ("Total Kuis", f"{data['total_kuis']}x"),
-            ("Rata-rata Nilai", f"{data['rata_rata']}"),
-            ("Nilai Tertinggi", f"{data['tertinggi']}"),
-            ("Nilai Terendah", f"{data['terendah']}"),
-            ("Akurasi Jawaban", f"{akurasi}%")
-        ]
-
-        for idx, (judul_item, nilai_item) in enumerate(item_ringkasan):
-            frame_ringkasan.columnconfigure(idx, weight=1)
-            kotak = ttk.Frame(frame_ringkasan)
-            kotak.grid(row=0, column=idx, padx=5)
-
-            ttk.Label(
-                kotak,
-                text=judul_item,
-                font=("Arial", 9)
-            ).pack()
-            ttk.Label(
-                kotak,
-                text=nilai_item,
-                font=("Arial", 14, "bold")
-            ).pack(pady=(2, 0))
-
-        # Tabel Statistik per Materi
-        frame_materi = ttk.LabelFrame(
-            frame,
-            text="Statistik per Materi",
-            padding=8
-        )
-        frame_materi.pack(fill="both", expand=True)
-
-        tabel = ttk.Treeview(
-            frame_materi,
-            columns=("materi", "jumlah", "rata", "tertinggi"),
-            show="headings",
-            height=6
-        )
-        tabel.heading("materi", text="Materi")
-        tabel.heading("jumlah", text="Jumlah Kuis")
-        tabel.heading("rata", text="Rata-rata Nilai")
-        tabel.heading("tertinggi", text="Nilai Tertinggi")
-
-        tabel.column("materi", width=250)
-        tabel.column("jumlah", width=120, anchor="center")
-        tabel.column("rata", width=130, anchor="center")
-        tabel.column("tertinggi", width=130, anchor="center")
-        tabel.pack(fill="both", expand=True)
-
-        for materi_item, jml, rata, maks in data["per_materi"]:
-            tabel.insert(
-                "",
-                "end",
-                values=(materi_item, f"{jml}x", rata, maks)
-            )
-
-        bagian_bawah = ttk.Frame(self.root, padding=8)
-        bagian_bawah.pack(fill="x")
+            text="Lihat Riwayat Nilai",
+            command=self.tampilkan_riwayat
+        ).pack(fill="x", pady=5)
 
         ttk.Button(
-            bagian_bawah,
-            text="Kembali ke Menu",
-            command=self.tampilkan_menu
-        ).pack()
+            frame,
+            text="Leaderboard (Top 10)",
+            command=self.tampilkan_leaderboard
+        ).pack(fill="x", pady=5)
+
+        ttk.Button(
+            frame,
+            text="Logout",
+            command=self.logout
+        ).pack(fill="x", pady=5)
+
+        ttk.Label(
+            frame,
+            text="Nilai dan riwayat tersimpan di database SQLite."
+        ).pack(pady=10)
 
     def logout(self):
         if self.timer_id is not None:
@@ -654,7 +549,6 @@ class SmartQuiz:
         self.jawaban_benar = 0
         self.jawaban_peserta = []
 
-        # Mengatur ulang timer setiap kuis baru dimulai
         if self.timer_id is not None:
             self.root.after_cancel(self.timer_id)
 
@@ -665,7 +559,6 @@ class SmartQuiz:
 
         self.tampilkan_soal()
 
-        # Memulai hitung mundur
         self.timer_id = self.root.after(
             1000,
             self.hitung_mundur
@@ -678,7 +571,6 @@ class SmartQuiz:
         if self.waktu_tersisa <= 0:
             self.waktu_habis = True
 
-            # Mengisi soal yang belum dijawab dengan teks kosong
             while len(self.jawaban_peserta) < JUMLAH_SOAL:
                 self.jawaban_peserta.append("")
 
@@ -727,7 +619,6 @@ class SmartQuiz:
             font=("Arial", 10, "italic")
         ).pack(anchor="w", pady=(0, 8))
 
-        # Menampilkan timer
         menit, detik = divmod(
             self.waktu_tersisa,
             60
@@ -801,13 +692,11 @@ class SmartQuiz:
             self.selesaikan_kuis()
 
     def selesaikan_kuis(self):
-        # Mencegah hasil tersimpan lebih dari satu kali
         if self.kuis_selesai:
             return
 
         self.kuis_selesai = True
 
-        # Menghentikan timer
         if self.timer_id is not None:
             self.root.after_cancel(self.timer_id)
             self.timer_id = None
@@ -879,25 +768,31 @@ class SmartQuiz:
             frame,
             text="Lihat Pembahasan Jawaban",
             command=self.tampilkan_pembahasan
-        ).pack(fill="x", pady=(18, 6))
+        ).pack(fill="x", pady=(15, 5))
+
+        ttk.Button(
+            frame,
+            text="Lihat Statistik Perkembangan",
+            command=self.tampilkan_statistik
+        ).pack(fill="x", pady=5)
 
         ttk.Button(
             frame,
             text="Lihat Leaderboard",
             command=self.tampilkan_leaderboard
-        ).pack(fill="x", pady=6)
+        ).pack(fill="x", pady=5)
 
         ttk.Button(
             frame,
             text="Lihat Riwayat Nilai",
             command=self.tampilkan_riwayat
-        ).pack(fill="x", pady=6)
+        ).pack(fill="x", pady=5)
 
         ttk.Button(
             frame,
             text="Kembali ke Menu",
             command=self.tampilkan_menu
-        ).pack(fill="x", pady=6)
+        ).pack(fill="x", pady=5)
 
     def tampilkan_pembahasan(self):
         self.bersihkan()
@@ -958,6 +853,188 @@ class SmartQuiz:
                 )
             )
         ).pack(pady=10)
+
+    # -------------------------------------------------
+    # STATISTIK PERKEMBANGAN BELAJAR
+    # -------------------------------------------------
+
+    def tampilkan_statistik(self):
+        self.bersihkan()
+
+        frame = ttk.Frame(self.root, padding=20)
+        frame.pack(fill="both", expand=True)
+
+        self.buat_judul(frame, "Statistik Perkembangan Belajar")
+
+        data = ambil_statistik(self.user["id"])
+
+        if data["total_kuis"] == 0:
+            ttk.Label(
+                frame,
+                text="Belum ada data kuis. Silakan kerjakan kuis terlebih dahulu.",
+                font=("Arial", 11)
+            ).pack(pady=40)
+
+            ttk.Button(
+                frame,
+                text="Kembali ke Menu",
+                command=self.tampilkan_menu
+            ).pack(pady=10)
+            return
+
+        # Ringkasan Statistik Utama
+        frame_ringkasan = ttk.LabelFrame(
+            frame,
+            text="Ringkasan Pengerjaan Kuis",
+            padding=12
+        )
+        frame_ringkasan.pack(fill="x", pady=(0, 12))
+
+        akurasi = round(
+            (data["total_benar"] / data["total_soal"]) * 100, 1
+        ) if data["total_soal"] > 0 else 0
+
+        item_ringkasan = [
+            ("Total Kuis", f"{data['total_kuis']}x"),
+            ("Rata-rata Nilai", f"{data['rata_rata']}"),
+            ("Nilai Tertinggi", f"{data['tertinggi']}"),
+            ("Nilai Terendah", f"{data['terendah']}"),
+            ("Akurasi Jawaban", f"{akurasi}%")
+        ]
+
+        for idx, (judul_item, nilai_item) in enumerate(item_ringkasan):
+            frame_ringkasan.columnconfigure(idx, weight=1)
+            kotak = ttk.Frame(frame_ringkasan)
+            kotak.grid(row=0, column=idx, padx=5)
+
+            ttk.Label(
+                kotak,
+                text=judul_item,
+                font=("Arial", 9)
+            ).pack()
+            ttk.Label(
+                kotak,
+                text=nilai_item,
+                font=("Arial", 14, "bold")
+            ).pack(pady=(2, 0))
+
+        # Grafik Garis Perkembangan Nilai
+        frame_grafik = ttk.LabelFrame(
+            frame,
+            text="Grafik Perkembangan Nilai (10 Kuis Terakhir)",
+            padding=10
+        )
+        frame_grafik.pack(fill="x", pady=(0, 12))
+
+        lebar_canvas = 660
+        tinggi_canvas = 170
+        canvas = tk.Canvas(
+            frame_grafik,
+            width=lebar_canvas,
+            height=tinggi_canvas,
+            bg="white",
+            highlightthickness=1,
+            highlightbackground="#cccccc"
+        )
+        canvas.pack()
+
+        riwayat_terakhir = data["perkembangan"][-10:]
+        pad_kiri, pad_kanan = 45, 25
+        pad_atas, pad_bawah = 20, 30
+        area_w = lebar_canvas - pad_kiri - pad_kanan
+        area_h = tinggi_canvas - pad_atas - pad_bawah
+
+        # Garis bantu horizontal (0, 50, 100)
+        for nilai_garis in (0, 50, 100):
+            y = pad_atas + area_h - (nilai_garis / 100 * area_h)
+            canvas.create_line(
+                pad_kiri, y, lebar_canvas - pad_kanan, y,
+                fill="#e6e6e6", dash=(3, 3)
+            )
+            canvas.create_text(
+                pad_kiri - 10, y,
+                text=str(nilai_garis),
+                anchor="e",
+                font=("Arial", 8),
+                fill="#666666"
+            )
+
+        jumlah_titik = len(riwayat_terakhir)
+        koordinat = []
+
+        for i, (_, _, skor_item, _) in enumerate(riwayat_terakhir):
+            if jumlah_titik == 1:
+                x = pad_kiri + area_w / 2
+            else:
+                x = pad_kiri + (i / (jumlah_titik - 1)) * area_w
+            y = pad_atas + area_h - (skor_item / 100 * area_h)
+            koordinat.append((x, y, skor_item, i + 1))
+
+        # Gambar garis penghubung
+        for i in range(len(koordinat) - 1):
+            x1, y1, _, _ = koordinat[i]
+            x2, y2, _, _ = koordinat[i + 1]
+            canvas.create_line(x1, y1, x2, y2, fill="#1f6aa5", width=2)
+
+        # Gambar titik & label angka
+        for x, y, skor_item, urutan in koordinat:
+            canvas.create_oval(
+                x - 4, y - 4, x + 4, y + 4,
+                fill="#1f6aa5", outline="white", width=1
+            )
+            canvas.create_text(
+                x, y - 10,
+                text=str(skor_item),
+                font=("Arial", 8, "bold"),
+                fill="#1f6aa5"
+            )
+            canvas.create_text(
+                x, tinggi_canvas - 12,
+                text=f"Kuis {urutan}",
+                font=("Arial", 8),
+                fill="#555555"
+            )
+
+        # Tabel Statistik per Materi
+        frame_materi = ttk.LabelFrame(
+            frame,
+            text="Statistik per Materi",
+            padding=8
+        )
+        frame_materi.pack(fill="both", expand=True)
+
+        tabel = ttk.Treeview(
+            frame_materi,
+            columns=("materi", "jumlah", "rata", "tertinggi"),
+            show="headings",
+            height=4
+        )
+        tabel.heading("materi", text="Materi")
+        tabel.heading("jumlah", text="Jumlah Kuis")
+        tabel.heading("rata", text="Rata-rata Nilai")
+        tabel.heading("tertinggi", text="Nilai Tertinggi")
+
+        tabel.column("materi", width=250)
+        tabel.column("jumlah", width=120, anchor="center")
+        tabel.column("rata", width=130, anchor="center")
+        tabel.column("tertinggi", width=130, anchor="center")
+        tabel.pack(fill="both", expand=True)
+
+        for materi_item, jml, rata, maks in data["per_materi"]:
+            tabel.insert(
+                "",
+                "end",
+                values=(materi_item, f"{jml}x", rata, maks)
+            )
+
+        bagian_bawah = ttk.Frame(self.root, padding=8)
+        bagian_bawah.pack(fill="x")
+
+        ttk.Button(
+            bagian_bawah,
+            text="Kembali ke Menu",
+            command=self.tampilkan_menu
+        ).pack()
 
     # -------------------------------------------------
     # RIWAYAT NILAI
