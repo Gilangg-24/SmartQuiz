@@ -213,15 +213,27 @@ def simpan_hasil(user_id, materi, tingkat_kesulitan,
         ))
 
 
-def ambil_riwayat(user_id):
+def ambil_riwayat(user_id, kata_kunci="", filter_kesulitan="Semua"):
+    query = """
+        SELECT materi, tingkat_kesulitan,
+               skor, benar, total, tanggal
+        FROM hasil_kuis
+        WHERE user_id = ?
+    """
+    parameter = [user_id]
+
+    if kata_kunci.strip():
+        query += " AND LOWER(materi) LIKE ?"
+        parameter.append(f"%{kata_kunci.strip().lower()}%")
+
+    if filter_kesulitan != "Semua":
+        query += " AND tingkat_kesulitan = ?"
+        parameter.append(filter_kesulitan)
+
+    query += " ORDER BY id DESC"
+
     with koneksi_db() as conn:
-        return conn.execute("""
-            SELECT materi, tingkat_kesulitan,
-                   skor, benar, total, tanggal
-            FROM hasil_kuis
-            WHERE user_id = ?
-            ORDER BY id DESC
-        """, (user_id,)).fetchall()
+        return conn.execute(query, parameter).fetchall()
 
 
 def ambil_leaderboard(limit=10):
