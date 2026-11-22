@@ -1067,6 +1067,29 @@ class SmartQuiz:
         ttk.Label(frame_filter, text="Cari Materi:").pack(side="left", padx=(0, 5))
         self.entry_cari_riwayat = ttk.Entry(frame_filter, width=22)
         self.entry_cari_riwayat.pack(side="left", padx=(0, 12))
+       
+        ttk.Label(frame_filter, text="Kesulitan:").pack(side="left", padx=(0, 5))
+        self.combo_filter_kesulitan = ttk.Combobox(
+            frame_filter,
+            values=["Semua", "Mudah", "Sedang", "Sulit"],
+            state="readonly",
+            width=12
+        )
+        self.combo_filter_kesulitan.current(0)
+        self.combo_filter_kesulitan.pack(side="left", padx=(0, 12))
+
+        ttk.Button(
+            frame_filter,
+            text="Terapkan",
+            command=self.muat_ulang_riwayat
+        ).pack(side="left", padx=(0, 5))
+
+        ttk.Button(
+            frame_filter,
+            text="Reset",
+            command=self.reset_filter_riwayat
+        ).pack(side="left")
+               
         kolom = (
             "materi",
             "kesulitan",
