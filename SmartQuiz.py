@@ -1060,6 +1060,13 @@ class SmartQuiz:
 
         self.buat_judul(frame, "Riwayat Nilai Kuis")
 
+        # Baris Pencarian dan Filter
+        frame_filter = ttk.Frame(frame)
+        frame_filter.pack(fill="x", pady=(0, 12))
+
+        ttk.Label(frame_filter, text="Cari Materi:").pack(side="left", padx=(0, 5))
+        self.entry_cari_riwayat = ttk.Entry(frame_filter, width=22)
+        self.entry_cari_riwayat.pack(side="left", padx=(0, 12))
         kolom = (
             "materi",
             "kesulitan",
