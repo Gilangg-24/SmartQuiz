@@ -1049,7 +1049,7 @@ class SmartQuiz:
         ).pack()
 
     # -------------------------------------------------
-    # RIWAYAT NILAI
+    # RIWAYAT NILAI (PENCARIAN & FILTER)
     # -------------------------------------------------
 
     def tampilkan_riwayat(self):
@@ -1062,12 +1062,12 @@ class SmartQuiz:
 
         # Baris Pencarian dan Filter
         frame_filter = ttk.Frame(frame)
-        frame_filter.pack(fill="x", pady=(0, 12))
+        frame_filter.pack(fill="x", pady=(0, 8))
 
         ttk.Label(frame_filter, text="Cari Materi:").pack(side="left", padx=(0, 5))
         self.entry_cari_riwayat = ttk.Entry(frame_filter, width=22)
         self.entry_cari_riwayat.pack(side="left", padx=(0, 12))
-       
+
         ttk.Label(frame_filter, text="Kesulitan:").pack(side="left", padx=(0, 5))
         self.combo_filter_kesulitan = ttk.Combobox(
             frame_filter,
@@ -1090,21 +1090,28 @@ class SmartQuiz:
             command=self.reset_filter_riwayat
         ).pack(side="left")
 
-        ttk.Label(frame_filter, text="Kesulitan:").pack(side="left", padx=(0, 5))
-        self.combo_filter_kesulitan = ttk.Combobox(
-            frame_filter,
-            values=["Semua", "Mudah", "Sedang", "Sulit"],
-            state="readonly",
-            width=12
+        # Binding pencarian & filter otomatis
+        self.entry_cari_riwayat.bind(
+            "<KeyRelease>",
+            lambda event: self.muat_ulang_riwayat()
         )
-        self.combo_filter_kesulitan.current(0)
-        self.combo_filter_kesulitan.pack(side="left", padx=(0, 12))
+        self.combo_filter_kesulitan.bind(
+            "<<ComboboxSelected>>",
+            lambda event: self.muat_ulang_riwayat()
+        )
 
-        ttk.Button(
-            frame_filter,
-            text="Terapkan",
-            command=self.muat_ulang_riwayat
-        ).pack(side="left", padx=(0, 5))
+        # Indikator jumlah riwayat
+        self.label_status_riwayat = ttk.Label(
+            frame,
+            text="",
+            font=("Arial", 9, "italic")
+        )
+        self.label_status_riwayat.pack(anchor="w", pady=(0, 6))
+
+        # Tabel Riwayat
+        frame_tabel = ttk.Frame(frame)
+        frame_tabel.pack(fill="both", expand=True)
+
         kolom = (
             "materi",
             "kesulitan",
@@ -1113,36 +1120,36 @@ class SmartQuiz:
             "tanggal"
         )
 
-        tabel = ttk.Treeview(
-            frame,
+        self.tabel_riwayat = ttk.Treeview(
+            frame_tabel,
             columns=kolom,
             show="headings",
-            height=14
+            height=13
         )
 
-        tabel.heading("materi", text="Materi")
-        tabel.heading("kesulitan", text="Kesulitan")
-        tabel.heading("skor", text="Nilai")
-        tabel.heading("benar", text="Jawaban Benar")
-        tabel.heading("tanggal", text="Tanggal")
+        self.tabel_riwayat.heading("materi", text="Materi")
+        self.tabel_riwayat.heading("kesulitan", text="Kesulitan")
+        self.tabel_riwayat.heading("skor", text="Nilai")
+        self.tabel_riwayat.heading("benar", text="Jawaban Benar")
+        self.tabel_riwayat.heading("tanggal", text="Tanggal")
 
-        tabel.column("materi", width=200)
-        tabel.column("kesulitan", width=90, anchor="center")
-        tabel.column("skor", width=70, anchor="center")
-        tabel.column("benar", width=120, anchor="center")
-        tabel.column("tanggal", width=160, anchor="center")
+        self.tabel_riwayat.column("materi", width=200)
+        self.tabel_riwayat.column("kesulitan", width=90, anchor="center")
+        self.tabel_riwayat.column("skor", width=70, anchor="center")
+        self.tabel_riwayat.column("benar", width=120, anchor="center")
+        self.tabel_riwayat.column("tanggal", width=160, anchor="center")
 
         scrollbar = ttk.Scrollbar(
-            frame,
+            frame_tabel,
             orient="vertical",
-            command=tabel.yview
+            command=self.tabel_riwayat.yview
         )
 
-        tabel.configure(
+        self.tabel_riwayat.configure(
             yscrollcommand=scrollbar.set
         )
 
-        tabel.pack(
+        self.tabel_riwayat.pack(
             side="left",
             fill="both",
             expand=True
@@ -1153,20 +1160,7 @@ class SmartQuiz:
             fill="y"
         )
 
-        for materi, kesulitan, skor, benar, total, tanggal in ambil_riwayat(
-            self.user["id"]
-        ):
-            tabel.insert(
-                "",
-                "end",
-                values=(
-                    materi,
-                    kesulitan,
-                    skor,
-                    f"{benar}/{total}",
-                    tanggal
-                )
-            )
+        self.muat_ulang_riwayat()
 
         bagian_bawah = ttk.Frame(
             self.root,
@@ -1179,6 +1173,42 @@ class SmartQuiz:
             text="Kembali ke Menu",
             command=self.tampilkan_menu
         ).pack()
+
+    def muat_ulang_riwayat(self):
+        for item in self.tabel_riwayat.get_children():
+            self.tabel_riwayat.delete(item)
+
+        kata_kunci = self.entry_cari_riwayat.get()
+        kesulitan = self.combo_filter_kesulitan.get()
+
+        hasil = ambil_riwayat(self.user["id"], kata_kunci, kesulitan)
+
+        for materi, kesulitan_db, skor, benar, total, tanggal in hasil:
+            self.tabel_riwayat.insert(
+                "",
+                "end",
+                values=(
+                    materi,
+                    kesulitan_db,
+                    skor,
+                    f"{benar}/{total}",
+                    tanggal
+                )
+            )
+
+        if len(hasil) == 0:
+            self.label_status_riwayat.config(
+                text="Tidak ada riwayat yang sesuai dengan filter."
+            )
+        else:
+            self.label_status_riwayat.config(
+                text=f"Menampilkan {len(hasil)} data riwayat."
+            )
+
+    def reset_filter_riwayat(self):
+        self.entry_cari_riwayat.delete(0, "end")
+        self.combo_filter_kesulitan.current(0)
+        self.muat_ulang_riwayat()
 
     # -------------------------------------------------
     # LEADERBOARD (TOP 10)
